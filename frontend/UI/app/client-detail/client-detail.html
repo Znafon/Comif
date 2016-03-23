@@ -1,0 +1,19 @@
+
+<div class="box">
+  <div class="box-header with-border">
+    <h3 class="box-title"><span class="client-detail" ng-click="modifier.nom = true" ng-if="!modifier.nom">{{client.nom}}</span>
+      <form ng-submit="updateNom(nouveau.nom)" class="inline">
+        <input ng-blur="escape()" ui-keydown="{esc: 'escape($event)'}" type="text" ng-model="nouveau.nom" ng-value="client.nom" ng-if="modifier.nom" size="{{client.nom.length}}" required autofocus>
+      </form>
+      —
+      <span class="client-detail" ng-click="modifier.solde = true" ng-if="!modifier.solde" ng-class="{label: client.solde <= 0, 'label-danger': client.solde <= 0}">{{client.solde}} €</span>
+      <form ng-submit="updateSolde(nouveau.solde)" class="inline">
+        <input ng-blur="escape()" ui-keydown="{esc: 'escape($event)'}" type="number" ng-model="nouveau.solde" ng-value="client.solde" ng-if="modifier.solde" step="0.01" required autofocus>
+      </form>
+    </h3>
+  </div>
+  <!-- /.box-header -->
+  <div class="box-body">
+</div>
+<!-- /.box-body -->
+</div>

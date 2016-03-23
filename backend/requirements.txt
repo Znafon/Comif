@@ -1,0 +1,11 @@
+Django==1.9.1
+django-cors-headers==1.1.0
+django-filter==0.12.0
+django-simple-history==1.7.0
+djangorestframework==3.3.2
+Markdown==2.6.5
+wheel==0.26.0
+django-colorfield
+drfdocs
+mysql-python
+gunicorn

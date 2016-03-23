@@ -1,0 +1,29 @@
+<div class="wrapper hold-transition login-page full-height">
+  <div class="login-box">
+    <div class="login-logo">
+      Co<b>mif'</b>
+    </div><!-- /.login-logo -->
+    <div class="login-box-body">
+      <form ng-submit="go()">
+        <div class="form-group has-feedback">
+          <input class="form-control" ng-model="username" placeholder="Nom d'utilisateur" type="text" required autofocus>
+          <span class="glyphicon glyphicon-user form-control-feedback"></span>
+        </div>
+        <div class="form-group has-feedback">
+          <input class="form-control" ng-model="password" placeholder="Mot de passe" type="password" required>
+          <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+        </div>
+        <div class="row">
+          <div class="col-xs-6">
+            <p class="text-red" ng-show="loginFailed">
+              Identifiants incorrects
+            </p>
+          </div>
+          <div class="col-xs-6">
+            <button type="submit" class="btn btn-primary btn-block btn-flat" ng-disabled="loading"><span ng-if="!loading">Se connecter</span><i ng-if="loading" class="fa fa-refresh fa-spin ng-animate-disabled"></i></button>
+          </div><!-- /.col -->
+        </div>
+      </form>
+    </div><!-- /.login-box-body -->
+  </div><!-- /.login-box -->
+</div>

@@ -1,0 +1,75 @@
+
+
+
+<div class="col-md-3 col-sm-push-9">
+  <div class="box">
+    <div class="box-header with-border">
+      <h3 class="box-title">{{ client.nom }}</h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+      <div class="row">
+        <div class="table-responsive col-md-12" ng-if="keys(commande).length">
+                <table class="table no-margin">
+                  <thead>
+                  <tr>
+                    <th>Item</th>
+                    <th class="text-center">Quantité</th>
+                    <th><span class="pull-right">Coût</span></th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr ng-repeat="(key, item) in commande">
+                    <td>{{ item.nom }}</td>
+                    <td class="text-center"><i class="ion ion-minus small pointer" ng-click="minus(item)"></i> {{ item.quantite }} <i class="ion ion-plus small pointer" ng-click="plus(item)"></i> </td>
+                    <td><span class="pull-right">{{ item.prix * item.quantite | currency : ""}}</span></td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+              <p class="text-muted text-center col-md-12" ng-if="!(keys(commande).length)">
+                <strong>Il n'y a rien pour le moment</strong>
+              </p>
+      </div>
+      <!-- /.row -->
+    </div>
+    <!-- ./box-body -->
+    <div class="box-footer">
+      <div class="row">
+        <p class="col-md-12">
+          <strong>Total<span class="pull-right">{{ total() | currency : ""}}</span></strong><br>
+          <strong ng-class="{'text-danger': computeSolde() <= 0}">Nouveau solde <span class="pull-right">{{ computeSolde() | currency : ""}}€</span></strong>
+          <button class="btn btn-primary btn-block" type="button" ng-click="go()" ng-disabled="loading" ng-if="keys(commande).length > 0"><span ng-if="!loading">Enregistrer la commande</span><i ng-if="loading" class="fa fa-refresh fa-spin ng-animate-disabled"></i></button>
+        </p>
+      </div>
+      <!-- /.row -->
+    </div>
+    <!-- /.box-footer -->
+  </div>
+  <!-- /.box -->
+</div>
+
+
+<div class="row col-md-9 col-sm-pull-3">
+  <section class="content-header" ng-repeat-start="categorie in inventaire">
+    <h1>{{ categorie.nom }}</h1>
+  </section>
+  <section class="content" ng-repeat-end>
+    <div class="col-md-4 col-sm-6 col-xs-12" ng-repeat="item in categorie.items" ng-click='addToCommand(item, $parent.$index, $index)'>
+      <div class="info-box item">
+        <span class="info-box-icon" style="background-color: {{ item.couleur }};"><i class="ion ion-ios-pricetag-outline"></i></span>
+
+        <div class="info-box-content">
+          <span class="info-box-text">{{ item.nom }}</span>
+          <span class="info-box-number">{{ item.prix }}<small>€</small><span class="pull-right">{{ item.nombre }}</span></span>
+        </div>
+        <!-- /.info-box-content -->
+      </div>
+      <!-- /.info-box -->
+    </div>
+    <!-- /.col -->
+  </section>
+
+  <!-- fix for small devices only -->
+  <div class="clearfix visible-sm-block"></div>
+</div>

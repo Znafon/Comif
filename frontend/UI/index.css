@@ -1,0 +1,84 @@
+.wrapper {
+  background-color: rgb(236, 240, 245);
+}
+
+html, body {
+  min-height: 100%;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+table.clients-list > tbody > tr, .client-detail {
+  cursor: pointer;
+}
+
+.item {
+  cursor: pointer;
+}
+
+.message-box.ng-enter,
+.message-box.ng-leave {
+  -webkit-transition:0.2s linear all;
+  transition:0.2s linear all;
+}
+
+.message-box.ng-enter,
+.message-box.ng-leave.ng-leave-active {
+  opacity:0;
+  height: 0px;
+}
+.message-box.ng-leave,
+.message-box.ng-enter.ng-enter-active {
+  opacity:1;
+}
+
+.message-box-dummy-alert {
+	opacity: 0;
+	bottom: 0px;
+	top: 0px;
+	position: absolute;
+}
+
+.inline {
+  display: inline;
+}
+.text-red.ng-hide {
+  transition:0.5s linear all;
+  opacity:0;
+}
+
+.text-red {
+  opacity:1;
+}
+
+.text-red.ng-hide-add, .text-red.ng-hide-remove {
+    transition: all linear 0.5s;
+}
+
+.text-red.ng-hide {
+  opacity: 0;
+}
+
+.full-height {
+  height: 100vh;
+}
+
+.nobody-found {
+	color: rgb(170, 170, 170);
+	font-weight: bold;
+	text-align: center;
+}
+
+.navbar-custom-menu .navbar-nav > li > button {
+	padding-top: 15px;
+	padding-bottom: 15px;
+	line-height: 20px;
+  text-decoration: none;
+  color: #FFF;
+}
+
+.navbar-custom-menu .navbar-nav > li > button:hover, .navbar-custom-menu .navbar-nav > li > button[aria-expanded=true] {
+  background-color: #367FA9;
+}

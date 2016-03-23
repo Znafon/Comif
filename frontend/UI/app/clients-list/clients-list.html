@@ -1,0 +1,35 @@
+
+<div class="box">
+  <div class="box-header with-border">
+    <h3 class="box-title">Liste des adhérents</h3>
+    <input type="text" name="name" ng-model="recherche" placeholder="Recherche..." class="pull-right" autofocus>
+  </div>
+  <!-- /.box-header -->
+  <div class="box-body">
+    <div ng-show="clientsFiltres.length">
+      <table class="table table-bordered table-hover clients-list">
+        <thead><tr>
+          <th>Nom</th>
+          <th>Solde</th>
+        </tr></thead>
+        <tbody>
+          <tr ng-click="commande(client.id)"
+          ng-repeat="client in clientsFiltres = (clients | filter:recherche:false) | limitTo:itemsPerPage:(currentPage-1)*itemsPerPage"
+          context-menu="menuOptions">
+          <td>
+            {{client.nom}}
+          </td>
+          <td>
+            <span ng-class="{label: client.solde <= 0, 'label-danger': client.solde <= 0}">{{client.solde}} €</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <uib-pagination total-items="clientsFiltres.length" items-per-page="itemsPerPage" ng-model="currentPage" class="pull-right" boundary-links="true" max-size="5"></uib-pagination>
+  </div>
+  <h2 ng-hide="clientsFiltres.length" class="nobody-found">
+    Oops, je n'ai trouvé personne avec ce nom...
+  </h2>
+</div>
+<!-- /.box-body -->
+</div>
