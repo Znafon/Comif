@@ -6,6 +6,18 @@ from .models import Client, Item, Categorie, Promotion
 
 from actions import export_as_csv_action
 
+class PromotionFilter(admin.SimpleListFilter):
+    title = 'promotion'
+    parameter_name = 'promotion'
+
+    def lookups(self, request, model_admin):
+        promotions = Promotion.objects.all().order_by('nom')
+        return map(lambda p: [p.id, p.nom], promotions)
+
+    def queryset(self, request, queryset):
+        if self.value() is not None:
+            return queryset.filter(promotion_id = self.value())
+
 class SoldeFilter(admin.SimpleListFilter):
     title = 'solde'
     parameter_name = 'solde'
@@ -70,7 +82,7 @@ class AvailableFilter(admin.SimpleListFilter):
 class ClientAdmin(SimpleHistoryAdmin):
     list_display = ('nom', 'solde', 'promotion')
     search_fields = ['nom', 'solde', 'promotion']
-    list_filter = (SoldeFilter,)
+    list_filter = (SoldeFilter,PromotionFilter,)
     actions = [export_as_csv_action("Exporter la sélection en CSV",
                                 fields=['nom', 'solde', 'promotion'])]
 
