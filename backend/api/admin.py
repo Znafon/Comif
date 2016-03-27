@@ -2,7 +2,7 @@
 
 from django.contrib import admin
 from simple_history.admin import SimpleHistoryAdmin
-from .models import Client, Item, Categorie, Promotion
+from .models import Client, Item, Categorie, Promotion, Transaction
 
 from actions import export_as_csv_action
 
@@ -108,6 +108,12 @@ class ItemAdmin(SimpleHistoryAdmin):
         else:
             list_display = ('nom', 'nombre', 'prix', 'categorie')
         return list_display
+
+@admin.register(Transaction)
+class TransactionAdmin(SimpleHistoryAdmin):
+    list_display = ('date', 'client', 'prix', 'type_de_la_transaction')
+    date_hierarchy = 'date';
+    search_fields = ['type_de_la_transaction',]
 
 admin.site.register(Categorie)
 admin.site.register(Promotion)

@@ -9,3 +9,4 @@ django-colorfield
 drfdocs
 mysql-python
 gunicorn
+django-debug-toolbar
