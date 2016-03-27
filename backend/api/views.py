@@ -34,6 +34,10 @@ class ClientDetail(mixins.RetrieveModelMixin,
         client.save()
         client.refresh_from_db()
         serializer = ClientSerializer(client)
+
+        transaction = Transaction(type_de_la_transaction = "Rechargement", prix = amount, client=client)
+        transaction.save()
+
         return Response(serializer.data)
 
 
@@ -61,7 +65,7 @@ def commande(request, pk):
 
     transaction = Transaction(type_de_la_transaction = "Achat", prix = cout, client=client)
     transaction.save()
-    
+
     return Response(serializer.data)
 
 
