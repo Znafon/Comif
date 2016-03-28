@@ -5,6 +5,7 @@ from simple_history.admin import SimpleHistoryAdmin
 from .models import Client, Item, Categorie, Promotion, Transaction
 from django.contrib.admin.views.main import ChangeList
 from django.db.models import Count, Sum
+from django.db import connection
 
 from actions import export_as_csv_action
 
@@ -112,10 +113,27 @@ class ItemAdmin(SimpleHistoryAdmin):
         return list_display
 
 class TransactionChangeList(ChangeList):
+
     def get_results(self, *args, **kwargs):
         super(TransactionChangeList, self).get_results(*args, **kwargs)
         q = self.result_list.aggregate(prix_total=Sum('prix'))
         self.total = q['prix_total']
+        self.chart = self.seven_days_stats()
+
+    def seven_days_stats(self):
+        data = []
+        label_data = []
+
+        truncate_date = connection.ops.date_trunc_sql('day', 'date')
+        qs = Transaction.objects.extra({'day':truncate_date})
+        dictionnaire = qs.filter(type_de_la_transaction='Achat').values('day').annotate(Sum('prix')).order_by('day')
+
+        for couple in dictionnaire:
+            data.append(str(couple['prix__sum']))
+            label_data.append(couple['day'].strftime('%d-%m'))
+        return {'data':data,'labels':label_data}
+
+
 
 @admin.register(Transaction)
 class TransactionAdmin(admin.ModelAdmin):
