@@ -6,6 +6,8 @@ from .models import Client, Item, Categorie, Promotion, Transaction
 from django.contrib.admin.views.main import ChangeList
 from django.db.models import Count, Sum
 from django.db import connection
+from datetime import timedelta
+from django.utils import timezone
 
 from actions import export_as_csv_action
 
@@ -124,10 +126,11 @@ class TransactionChangeList(ChangeList):
         data = ['Ventes (en euros)']
         label_data = ['x']
 
-        # TODO Ajouter un timedelta pour afficher les 7 derniers jours
+        # TODO Ajouter un timedelta pour afficher les 15 derniers jours
+        date_mini = timezone.now() - timedelta(days=16)
         truncate_date = connection.ops.date_trunc_sql('day', 'date')
         qs = Transaction.objects.extra({'day':truncate_date})
-        dictionnaire = qs.filter(type_de_la_transaction='Achat').values('day').annotate(Sum('prix')).order_by('day')
+        dictionnaire = qs.filter(type_de_la_transaction='Achat', date__gte = date_mini).values('day').annotate(Sum('prix')).order_by('day')
 
         for couple in dictionnaire:
             data.append(str(couple['prix__sum']))
