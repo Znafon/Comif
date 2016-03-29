@@ -121,16 +121,17 @@ class TransactionChangeList(ChangeList):
         self.chart = self.seven_days_stats()
 
     def seven_days_stats(self):
-        data = []
-        label_data = []
+        data = ['Ventes (en euros)']
+        label_data = ['x']
 
+        # TODO Ajouter un timedelta pour afficher les 7 derniers jours
         truncate_date = connection.ops.date_trunc_sql('day', 'date')
         qs = Transaction.objects.extra({'day':truncate_date})
         dictionnaire = qs.filter(type_de_la_transaction='Achat').values('day').annotate(Sum('prix')).order_by('day')
 
         for couple in dictionnaire:
             data.append(str(couple['prix__sum']))
-            label_data.append(couple['day'].strftime('%d-%m'))
+            label_data.append(couple['day'].strftime('%d-%m-%Y'))
         return {'data':data,'labels':label_data}
 
 
