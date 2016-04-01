@@ -49,6 +49,11 @@ def commande(request, pk):
 
     cout = sum([item.prix*nombre for item, nombre in items.iteritems()])
 
+    for item, nombre in items.iteritems():
+        item.nombre -= nombre
+        item.save()
+        item.refresh_from_db()
+
     client.solde -= cout
     client.save()
     client.refresh_from_db()
