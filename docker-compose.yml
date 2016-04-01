@@ -4,7 +4,6 @@ services:
                 build: backend
                 volumes:
                  - /usr/src/app/static
-                 - ./backend:/usr/src/app
                 links:
                  - bdd
                 restart: always
@@ -23,7 +22,7 @@ services:
                  - MYSQL_ROOT_PASSWORD=he8dau6V
                  - MYSQL_USER=django
                  - MYSQL_PASSWORD=ohTh3qui
-                 - MYSQL_DATABASE=comif
+                 - MYSQL_DATABASE=comif 
                 volumes:
                  - ./bdd:/var/lib/mysql
                 restart: always
