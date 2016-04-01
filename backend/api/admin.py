@@ -2,7 +2,7 @@
 
 from django.contrib import admin
 from simple_history.admin import SimpleHistoryAdmin
-from .models import Client, Item, Categorie
+from .models import Client, Item, Categorie, Promotion
 
 from actions import export_as_csv_action
 
@@ -68,11 +68,11 @@ class AvailableFilter(admin.SimpleListFilter):
 
 @admin.register(Client)
 class ClientAdmin(SimpleHistoryAdmin):
-    list_display = ('nom', 'solde')
-    search_fields = ['nom', 'solde']
+    list_display = ('nom', 'solde', 'promotion')
+    search_fields = ['nom', 'solde', 'promotion']
     list_filter = (SoldeFilter,)
     actions = [export_as_csv_action("Exporter la sélection en CSV",
-                                fields=['nom', 'solde'])]
+                                fields=['nom', 'solde', 'promotion'])]
 
 @admin.register(Item)
 class ItemAdmin(SimpleHistoryAdmin):
@@ -98,3 +98,4 @@ class ItemAdmin(SimpleHistoryAdmin):
         return list_display
 
 admin.site.register(Categorie)
+admin.site.register(Promotion)

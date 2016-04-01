@@ -4,10 +4,18 @@ from django.db import models
 from simple_history.models import HistoricalRecords
 from colorfield.fields import ColorField
 
+class Promotion(models.Model):
+    nom = models.CharField(max_length = 30)
+
+    def __unicode__(self):
+        return unicode(self.nom)
+
 class Client(models.Model):
     nom = models.CharField(max_length = 300)
     solde = models.DecimalField(max_digits = 5, decimal_places = 2)
     history = HistoricalRecords()
+
+    promotion = models.ForeignKey(Promotion, models.PROTECT, default = 1)
 
     class Meta:
         ordering = ['nom']
