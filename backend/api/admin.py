@@ -2,9 +2,26 @@
 
 from django.contrib import admin
 from simple_history.admin import SimpleHistoryAdmin
-from .models import Client, Item, Categorie, Promotion
+from .models import Client, Item, Categorie, Promotion, Transaction
+from django.contrib.admin.views.main import ChangeList
+from django.db.models import Count, Sum
+from django.db import connection
+from datetime import timedelta
+from django.utils import timezone
 
 from actions import export_as_csv_action
+
+class PromotionFilter(admin.SimpleListFilter):
+    title = 'promotion'
+    parameter_name = 'promotion'
+
+    def lookups(self, request, model_admin):
+        promotions = Promotion.objects.all().order_by('nom')
+        return map(lambda p: [p.id, p.nom], promotions)
+
+    def queryset(self, request, queryset):
+        if self.value() is not None:
+            return queryset.filter(promotion_id = self.value())
 
 class SoldeFilter(admin.SimpleListFilter):
     title = 'solde'
@@ -70,7 +87,7 @@ class AvailableFilter(admin.SimpleListFilter):
 class ClientAdmin(SimpleHistoryAdmin):
     list_display = ('nom', 'solde', 'promotion')
     search_fields = ['nom', 'solde', 'promotion']
-    list_filter = (SoldeFilter,)
+    list_filter = (SoldeFilter,PromotionFilter,)
     actions = [export_as_csv_action("Exporter la sélection en CSV",
                                 fields=['nom', 'solde', 'promotion'])]
 
@@ -96,6 +113,44 @@ class ItemAdmin(SimpleHistoryAdmin):
         else:
             list_display = ('nom', 'nombre', 'prix', 'categorie')
         return list_display
+
+class TransactionChangeList(ChangeList):
+
+    def get_results(self, *args, **kwargs):
+        super(TransactionChangeList, self).get_results(*args, **kwargs)
+        q = self.result_list.aggregate(prix_total=Sum('prix'))
+        self.total = q['prix_total']
+        self.chart = self.seven_days_stats()
+
+    def seven_days_stats(self):
+        data = ['Ventes (en euros)']
+        label_data = ['x']
+
+        # TODO Ajouter un timedelta pour afficher les 15 derniers jours
+        date_mini = timezone.now() - timedelta(days=16)
+        truncate_date = connection.ops.date_trunc_sql('day', 'date')
+        qs = Transaction.objects.extra({'day':truncate_date})
+        dictionnaire = qs.filter(type_de_la_transaction='Achat', date__gte = date_mini).values('day').annotate(Sum('prix')).order_by('day')
+
+        for couple in dictionnaire:
+            data.append(str(couple['prix__sum']))
+            label_data.append(couple['day'].strftime('%d-%m-%Y'))
+        return {'data':data,'labels':label_data}
+
+
+
+@admin.register(Transaction)
+class TransactionAdmin(admin.ModelAdmin):
+    change_list_template = 'admin/transaction_change_list.html'
+    list_display = ('date', 'client', 'prix', 'type_de_la_transaction')
+    date_hierarchy = 'date';
+    search_fields = ['type_de_la_transaction',]
+
+    def get_changelist(self, request):
+        return TransactionChangeList
+
+    class Meta:
+        model=Transaction
 
 admin.site.register(Categorie)
 admin.site.register(Promotion)

@@ -48,3 +48,15 @@ class Item(models.Model):
 
     def __unicode__(self):
         return u'{nom} - {nombre}'.format(nom = self.nom, nombre = self.nombre)
+
+class Transaction(models.Model):
+    type_de_la_transaction = models.CharField(max_length = 100)
+    date = models.DateTimeField(auto_now_add = True)
+    prix = models.DecimalField(max_digits = 5, decimal_places = 2)
+    client = models.ForeignKey(Client, on_delete = models.PROTECT)
+
+    class Meta:
+        ordering = ['date',]
+
+    def __unicode__(self):
+        return unicode(self.date)

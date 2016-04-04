@@ -1,0 +1,48 @@
+{% extends "admin/change_list.html" %}
+{% load i18n admin_urls admin_static admin_list %}
+
+{% block extrastyle %}
+  {{ block.super }}
+  <link rel="stylesheet" type="text/css" href="{% static "admin/css/changelists.css" %}" />
+  <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/c3/0.4.10/c3.min.css" />
+  <script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js" type="text/javascript"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js" type="text/javascript"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.16/d3.min.js" type="text/javascript"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/c3/0.4.10/c3.min.js" type="text/javascript"></script>
+  <script type="text/javascript">
+  $( document ).ready(function() {
+      var chart = c3.generate({
+        bindto: '#myChart',
+        data: {
+        x: 'x',
+        xFormat: '%d-%m-%Y', // 'xFormat' can be used as custom format of 'x'
+        columns: [
+            {{ cl.chart.labels|safe }},
+            {{ cl.chart.data|safe }}
+          ],
+          type: 'spline'
+        },
+        axis: {
+            x: {
+                type: 'timeseries',
+                tick: {
+                    format: '%d-%m-%Y'
+                },
+                label: { // ADD
+                position: 'outer-middle',
+                text: 'Date'
+              }
+            }
+        }
+      });
+  });
+  </script>
+{% endblock %}
+
+{% block result_list %}
+<div id="myChart"></div>
+    {% if action_form and actions_on_top and cl.show_admin_actions %}{% admin_actions %}{% endif %}
+    Total (selon les critères de recherche) : <strong>{{ cl.total }} €</strong>
+    {% result_list cl %}
+    {% if action_form and actions_on_bottom and cl.show_admin_actions %}{% admin_actions %}{% endif %}
+{% endblock %}
