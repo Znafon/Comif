@@ -26,3 +26,22 @@ services:
                 volumes:
                  - ./bdd:/var/lib/mysql
                 restart: always
+        backend-dev:
+                build: backend
+                volumes:
+                 - /usr/src/app/static
+                 - ./backend:/usr/src/app
+                links:
+                 - bdd
+                command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+                restart: always
+        dev:
+                build: frontend
+                ports:
+                 - "80:80"
+                volumes_from:
+                 - backend-dev:ro
+                links:
+                 - backend-dev:backend 
+                restart: always
+ 
