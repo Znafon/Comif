@@ -1,4 +1,4 @@
-from .models import Client, Categorie, Item
+from .models import Client, Categorie, Item, Transaction
 from .serializers import ClientSerializer, CategorieSerializer
 from rest_framework import mixins, generics
 from rest_framework.views import APIView
@@ -34,6 +34,10 @@ class ClientDetail(mixins.RetrieveModelMixin,
         client.save()
         client.refresh_from_db()
         serializer = ClientSerializer(client)
+
+        transaction = Transaction(type_de_la_transaction = "Rechargement", prix = amount, client=client)
+        transaction.save()
+
         return Response(serializer.data)
 
 
@@ -58,6 +62,10 @@ def commande(request, pk):
     client.save()
     client.refresh_from_db()
     serializer = ClientSerializer(client)
+
+    transaction = Transaction(type_de_la_transaction = "Achat", prix = cout, client=client)
+    transaction.save()
+
     return Response(serializer.data)
 
 
