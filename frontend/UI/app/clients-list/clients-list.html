@@ -11,6 +11,7 @@
         <thead><tr>
           <th>Nom</th>
           <th>Solde</th>
+	  <th>Cotisant</th>
         </tr></thead>
         <tbody>
           <tr ng-click="commande(client.id)"
@@ -22,6 +23,9 @@
           <td>
             <span ng-class="{label: client.solde <= 0, 'label-danger': client.solde <= 0}">{{client.solde}} €</span>
           </td>
+	  <td>
+	    <i class="fa fa-check" aria-hidden="true" ng-if="client.cotisant"></i>
+	  </td>
         </tr>
       </tbody>
     </table>

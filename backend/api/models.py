@@ -13,6 +13,7 @@ class Promotion(models.Model):
 class Client(models.Model):
     nom = models.CharField(max_length = 300)
     solde = models.DecimalField(max_digits = 5, decimal_places = 2)
+    cotisant = models.BooleanField(default=False)
     history = HistoricalRecords()
 
     promotion = models.ForeignKey(Promotion, models.PROTECT, default = 1)
